@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delta 6000 R – Parts Catalog</title>
+  <style>
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; font-weight:bold; color:#000; background:#f7f7f7; }
+    header { padding:12px; background:#fff; border-bottom:2px solid #000; }
+    #search { width:100%; padding:10px; font-size:16px; font-weight:bold; border:2px solid #000; }
+    .container { display:flex; height:calc(100vh - 64px); }
+    .left { width:45%; overflow-y:auto; background:#fff; border-right:2px solid #000; }
+    .right { width:55%; display:flex; justify-content:center; align-items:center; background:#ededed; }
+    .row { padding:10px; border-bottom:1px solid #ccc; cursor:pointer; }
+    .row:hover { background:#e0e0e0; }
+    .section { font-size:18px; }
+    .unit { margin-left:15px; font-size:16px; }
+    .item { margin-left:30px; font-size:14px; }
+    img { max-width:95%; max-height:95%; border:2px solid #000; background:#fff; }
+  </style>
+</head>
+<body>
+<header>
+  <input id="search" type="text" placeholder="Search by item code, item name, unit, or section" onkeyup="filterCatalog()">
+</header>
+<div class="container">
+  <div class="left" id="catalog"></div>
+  <div class="right"><img id="drawing" alt="Select a unit or item to view drawing"></div>
+</div>
+<script>
+const catalog = [
+  { sectionCode:"03", sectionName:"LONGITUDINAL SEALING", units:[
+    { unitCode:"G42010038C", unitName:"SEALING ROLLERS", drawing:"03_G42010038C.png", items:[
+      {code:"1030164101", name:"Longitudinal Sealer"},
+      {code:"1030264119", name:"Roller Housing Assembly"},
+      {code:"1039964194", name:"Cold Roller Heads"}
+    ]}
+  ]},
+  { sectionCode:"04", sectionName:"SEALING HEAD", units:[
+    { unitCode:"G42010038B", unitName:"HEAD ASSEMBLY", drawing:"04_G42010038B.png", items:[
+      {code:"1042164091", name:"Head Motor Assembly"},
+      {code:"1040664222", name:"Sealing Jaws"}
+    ]}
+  ]}
+];
+function loadCatalog(){
+  const c=document.getElementById('catalog'); c.innerHTML='';
+  catalog.forEach(s=>{
+    const sd=document.createElement('div'); sd.className='row section'; sd.textContent=s.sectionCode+' – '+s.sectionName; c.appendChild(sd);
+    s.units.forEach(u=>{
+      const ud=document.createElement('div'); ud.className='row unit'; ud.textContent=u.unitCode+' – '+u.unitName; ud.onclick=()=>showDrawing(u.drawing); c.appendChild(ud);
+      u.items.forEach(i=>{
+        const id=document.createElement('div'); id.className='row item'; id.textContent=i.code+' – '+i.name; id.onclick=()=>showDrawing(u.drawing); c.appendChild(id);
+      });
+    });
+  });
+}
+function showDrawing(src){ document.getElementById('drawing').src=src; }
+function filterCatalog(){ const v=document.getElementById('search').value.toLowerCase(); document.querySelectorAll('.row').forEach(r=>{ r.style.display=r.textContent.toLowerCase().includes(v)?'block':'none';}); }
+loadCatalog();
+</script>
+</body>
+</html>
